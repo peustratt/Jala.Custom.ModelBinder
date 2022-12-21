@@ -21,6 +21,15 @@ public class CustomModelBinder: IModelBinder
         // }
         // return Task.CompletedTask;
 
+        var id = 0;
+        if (bindingContext.ActionContext.HttpContext.Request.Query.Count > 0)
+        {
+            if (bindingContext.ActionContext.HttpContext.Request.Query.ContainsKey("id"))
+            {
+                id = int.Parse(bindingContext.ActionContext.HttpContext.Request.Query["id"]);
+            }
+        }
+
         string valueFromBody;
        //The using statement here will dispose the connection opened to read the data from the body stream after it finish the reading
         using (var streamReader = new StreamReader(bindingContext.HttpContext.Request.Body))
@@ -38,6 +47,10 @@ public class CustomModelBinder: IModelBinder
         {
             //Try to deserialize the string to the Page type
             modelInstance = JsonConvert.DeserializeObject<Page>(valueFromBody);
+            if (id > 0)
+            {
+                if (modelInstance != null) modelInstance.Id = id;
+            }
         }
         catch (Exception e)
         {

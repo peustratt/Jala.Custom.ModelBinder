@@ -20,7 +20,7 @@ public class ModelBinderController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult Create(Page page)
+    public IActionResult Create([FromQuery] string id, [FromBody] Page page)
     {
         return Ok(page);
     }
